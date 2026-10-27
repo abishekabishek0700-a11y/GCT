@@ -1,0 +1,2071 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garbage Complaint Tracker</title>
+
+<style>
+:root {
+    --green: #16865b;
+    --dark: #12372a;
+    --light: #eaf7ef;
+    --bg: #f4f8f5;
+    --text: #24352d;
+    --muted: #718078;
+    --red: #d64545;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+button, input, select, textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.btn {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 15px;
+    background: var(--green);
+    color: white;
+    font-weight: bold;
+}
+
+.btn:hover {
+    filter: brightness(.94);
+}
+
+.btn-light {
+    background: white;
+    color: var(--green);
+    border: 1px solid #d9e4dc;
+}
+
+.btn-red {
+    background: #ffeded;
+    color: #b42323;
+    border: 1px solid #ffd0d0;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 17px;
+    border: 1px solid #d9e4dc;
+    border-radius: 8px;
+    background: white;
+    outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--green);
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 8px 0 20px;
+}
+
+.brand {
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.brand-icon {
+    background: #baf0cc;
+    color: var(--dark);
+    padding: 7px;
+    border-radius: 9px;
+    margin-right: 5px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #e4ece6;
+    border-radius: 13px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    margin-bottom: 17px;
+}
+
+.notice {
+    background: #edf8f0;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.7;
+    margin: 15px 0;
+}
+
+.message {
+    padding: 11px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 12px;
+}
+
+.error {
+    background: #fff0f0;
+    color: #b42323;
+}
+
+.success {
+    background: #eaf8ef;
+    color: #167344;
+}
+
+/* LOGIN */
+
+#authPage {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #e2f8e9, #f5fbf6);
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 950px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 55px #12372a18;
+}
+
+.auth-banner {
+    padding: 40px;
+    background: var(--dark);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-banner h1 {
+    font-size: 34px;
+    line-height: 1.3;
+    margin: 35px 0 15px;
+}
+
+.auth-banner p {
+    color: #d0e6d8;
+    line-height: 1.8;
+}
+
+.auth-art {
+    font-size: 65px;
+    margin-top: 30px;
+}
+
+.auth-form {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-form h2 {
+    margin-bottom: 8px;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    color: var(--green);
+    font-weight: bold;
+}
+
+.auth-switch {
+    text-align: center;
+    font-size: 13px;
+    margin-top: 20px;
+    color: var(--muted);
+}
+
+/* APPLICATION */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background: var(--dark);
+    color: white;
+    padding: 25px 15px;
+    overflow-y: auto;
+}
+
+.sidebar .brand {
+    margin-bottom: 35px;
+}
+
+.role-label {
+    font-size: 11px;
+    color: #b7d5c3;
+    letter-spacing: 1px;
+    margin: 15px 10px;
+}
+
+.nav-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    color: #d5e8dc;
+    border: none;
+    border-radius: 8px;
+    padding: 13px 10px;
+    margin-bottom: 5px;
+}
+
+.nav-btn:hover, .nav-btn.active {
+    background: #245642;
+    color: white;
+}
+
+.main {
+    margin-left: 250px;
+    padding: 28px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.topbar h1 {
+    font-size: 25px;
+}
+
+.profile {
+    text-align: right;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.profile small {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.welcome {
+    background: linear-gradient(110deg, #d9f5e2, #f0fff3);
+    border-radius: 14px;
+    padding: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.welcome h2 {
+    margin-bottom: 10px;
+}
+
+.welcome p {
+    font-size: 13px;
+    color: #526d5b;
+    line-height: 1.8;
+}
+
+.welcome-icon {
+    font-size: 48px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: white;
+    border: 1px solid #e6ede7;
+    border-radius: 12px;
+    padding: 19px;
+}
+
+.stat .icon {
+    font-size: 23px;
+}
+
+.stat h2 {
+    margin: 12px 0 6px;
+    font-size: 28px;
+}
+
+.stat p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin: 22px 0 15px;
+}
+
+.section-heading h2 {
+    font-size: 19px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 15px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.complaint-list {
+    display: grid;
+    gap: 14px;
+}
+
+.complaint {
+    background: white;
+    border: 1px solid #e1eae3;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.complaint-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--light);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    flex-shrink: 0;
+}
+
+.complaint-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.complaint-info h3 {
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.complaint-info p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.Pending {
+    background: #fff1d5;
+    color: #936000;
+}
+
+.In-Progress {
+    background: #e5efff;
+    color: #225eb6;
+}
+
+.Resolved {
+    background: #ddf8e6;
+    color: #167844;
+}
+
+.Rejected {
+    background: #ffe4e4;
+    color: #b62d2d;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 145px;
+    flex-shrink: 0;
+}
+
+.actions select {
+    margin: 0 0 5px;
+    padding: 9px;
+    font-size: 12px;
+}
+
+.small-btn {
+    background: white;
+    border: 1px solid #d9e4dc;
+    border-radius: 7px;
+    padding: 9px;
+    font-size: 12px;
+}
+
+.empty {
+    background: white;
+    border-radius: 12px;
+    text-align: center;
+    padding: 35px 15px;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.search {
+    max-width: 400px;
+}
+
+.worker-card {
+    border: 1px solid #e1eae3;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+.worker-card p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 7px;
+}
+
+.toast {
+    display: none;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 100;
+    max-width: 90%;
+    padding: 15px 20px;
+    border-radius: 10px;
+    color: white;
+    background: var(--dark);
+}
+
+@media(max-width: 950px) {
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .auth-banner, .auth-form {
+        padding: 28px;
+    }
+}
+
+@media(max-width: 650px) {
+    .auth-container {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-banner h1 {
+        font-size: 25px;
+        margin: 20px 0 10px;
+    }
+
+    .auth-art {
+        display: none;
+    }
+
+    .sidebar {
+        width: 65px;
+        padding: 15px 6px;
+    }
+
+    .sidebar .brand {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .brand-text, .nav-text, .role-label {
+        display: none;
+    }
+
+    .nav-btn {
+        text-align: center;
+        padding: 13px 2px;
+        font-size: 17px;
+    }
+
+    .main {
+        margin-left: 65px;
+        padding: 15px 10px;
+    }
+
+    .topbar h1 {
+        font-size: 19px;
+    }
+
+    .profile {
+        font-size: 11px;
+    }
+
+    .welcome {
+        padding: 16px;
+    }
+
+    .welcome h2 {
+        font-size: 19px;
+    }
+
+    .welcome-icon {
+        font-size: 30px;
+    }
+
+    .stat {
+        padding: 12px;
+    }
+
+    .stat h2 {
+        font-size: 23px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    .complaint {
+        flex-wrap: wrap;
+    }
+
+    .actions {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .actions > * {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .section-heading {
+        flex-wrap: wrap;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN AND REGISTRATION -->
+
+<section id="authPage">
+    <div class="auth-container">
+
+        <div class="auth-banner">
+            <div class="brand">
+                <span class="brand-icon">♻️</span>
+                <span class="brand-text">Garbage Complaint Tracker</span>
+            </div>
+
+            <h1>A Cleaner City Starts With You.</h1>
+
+            <p>
+                Report garbage problems, track complaints and work
+                together for a cleaner environment.
+            </p>
+
+            <div class="auth-art">🌍 🗑️ 🌱</div>
+        </div>
+
+        <div class="auth-form">
+
+            <div id="loginBox">
+                <h2>Welcome Back!</h2>
+                <p class="subtitle">Login to your account.</p>
+
+                <form id="loginForm">
+                    <label for="loginEmail">Email Address</label>
+                    <input id="loginEmail" type="email"
+                           autocomplete="username" required
+                           placeholder="Enter your email">
+
+                    <label for="loginPassword">Password</label>
+                    <input id="loginPassword" type="password"
+                           autocomplete="current-password" required
+                           placeholder="Enter your password">
+
+                    <button class="btn btn-block" type="submit">
+                        Login →
+                    </button>
+                </form>
+
+                <p class="auth-switch">
+                    Citizen account illaya?
+                    <button class="link-btn"
+                            onclick="showAuth('signup')">
+                        Create Account
+                    </button>
+                </p>
+
+                <p class="auth-switch">
+                    <button class="link-btn"
+                            onclick="showAuth('adminHelp')">
+                        Admin login information
+                    </button>
+                </p>
+            </div>
+
+            <div id="signupBox" class="hidden">
+                <h2>Create Account</h2>
+                <p class="subtitle">Citizen registration.</p>
+
+                <form id="signupForm">
+                    <label for="signupName">Full Name</label>
+                    <input id="signupName" required
+                           autocomplete="name"
+                           placeholder="Enter your name">
+
+                    <label for="signupEmail">Email Address</label>
+                    <input id="signupEmail" type="email" required
+                           autocomplete="email"
+                           placeholder="Enter your email">
+
+                    <label for="signupPassword">Password</label>
+                    <input id="signupPassword" type="password"
+                           minlength="8" required
+                           autocomplete="new-password"
+                           placeholder="Minimum 8 characters">
+
+                    <label for="signupConfirm">Confirm Password</label>
+                    <input id="signupConfirm" type="password"
+                           minlength="8" required
+                           autocomplete="new-password"
+                           placeholder="Re-enter password">
+
+                    <button class="btn btn-block" type="submit">
+                        Create Citizen Account
+                    </button>
+                </form>
+
+                <p class="auth-switch">
+                    Already registered?
+                    <button class="link-btn"
+                            onclick="showAuth('login')">
+                        Login
+                    </button>
+                </p>
+            </div>
+
+            <div id="adminHelpBox" class="hidden">
+                <h2>Administrator Access</h2>
+
+                <div class="notice">
+                    <strong>Email:</strong> admin123@gmail.com
+                    <br>
+                    <strong>Password:</strong> 1234567899
+                    <br><br>
+                    Demo credentials only. Do not use these credentials
+                    in a real deployed application.
+                </div>
+
+                <button class="btn btn-block"
+                        onclick="showAuth('login')">
+                    Go to Login
+                </button>
+            </div>
+
+            <div id="authMessage" aria-live="polite"></div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- APPLICATION -->
+
+<section id="appPage" class="hidden">
+
+    <aside class="sidebar">
+        <div class="brand">
+            ♻️ <span class="brand-text">Garbage Complaint Tracker</span>
+        </div>
+
+        <div class="role-label">WORKSPACE</div>
+
+        <nav id="navigation"></nav>
+
+        <button class="nav-btn" onclick="logout()">
+            🚪 <span class="nav-text">Logout</span>
+        </button>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p class="subtitle" id="pageSubtitle">
+                    Welcome to Garbage Complaint Tracker.
+                </p>
+            </div>
+
+            <div class="profile">
+                <strong id="profileName">User</strong>
+                <small id="profileRole">Citizen</small>
+            </div>
+        </header>
+
+
+        <!-- CITIZEN DASHBOARD -->
+
+        <section id="citizenHome" class="page">
+
+            <div class="welcome">
+                <div>
+                    <h2>Hello, <span id="citizenWelcome">Citizen</span>! 🌿</h2>
+                    <p>Report garbage issues and track their progress.</p>
+                    <br>
+                    <button class="btn"
+                            onclick="showPage('newComplaint')">
+                        + Report Garbage
+                    </button>
+                </div>
+                <div class="welcome-icon">🌳</div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="icon">📋</div>
+                    <h2 id="citizenTotal">0</h2>
+                    <p>My Complaints</p>
+                </div>
+
+                <div class="stat">
+                    <div class="icon">⏳</div>
+                    <h2 id="citizenPending">0</h2>
+                    <p>Pending</p>
+                </div>
+
+                <div class="stat">
+                    <div class="icon">🚛</div>
+                    <h2 id="citizenProgress">0</h2>
+                    <p>In Progress</p>
+                </div>
+
+                <div class="stat">
+                    <div class="icon">✅</div>
+                    <h2 id="citizenResolved">0</h2>
+                    <p>Resolved</p>
+                </div>
+            </div>
+
+            <div class="section-heading">
+                <h2>Recent Complaints</h2>
+
+                <button class="btn btn-light"
+                        onclick="showPage('myComplaints')">
+                    View All
+                </button>
+            </div>
+
+            <div id="citizenRecent" class="complaint-list"></div>
+
+        </section>
+
+
+        <!-- NEW COMPLAINT -->
+
+        <section id="newComplaint" class="page">
+
+            <div class="card">
+                <h3>📝 Submit a Garbage Complaint</h3>
+
+                <form id="complaintForm">
+
+                    <div class="form-grid">
+
+                        <div>
+                            <label for="complaintCategory">Category *</label>
+                            <select id="complaintCategory" required>
+                                <option value="">Select category</option>
+                                <option>Roadside Garbage</option>
+                                <option>Overflowing Dustbin</option>
+                                <option>Household Waste</option>
+                                <option>Plastic Waste</option>
+                                <option>Construction Waste</option>
+                                <option>Drainage Waste</option>
+                                <option>Market Waste</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="complaintDistrict">District *</label>
+                            <select id="complaintDistrict" required>
+                                <option value="">Select district</option>
+                                <option>Chennai</option>
+                                <option>Coimbatore</option>
+                                <option>Madurai</option>
+                                <option>Trichy</option>
+                                <option>Salem</option>
+                                <option>Erode</option>
+                                <option>Thanjavur</option>
+                                <option>Tirunelveli</option>
+                                <option>Vellore</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="full">
+                            <label for="complaintLocation">
+                                Garbage Location *
+                            </label>
+                            <input id="complaintLocation" required
+                                   placeholder="Street, area, landmark">
+                        </div>
+
+                        <div class="full">
+                            <label for="complaintDescription">
+                                Description *
+                            </label>
+                            <textarea id="complaintDescription" required
+                                      placeholder="Describe the problem..."></textarea>
+                        </div>
+
+                        <div class="full">
+                            <label for="complaintPhoto">
+                                Photo (optional)
+                            </label>
+                            <input id="complaintPhoto" type="file"
+                                   accept="image/*">
+                        </div>
+
+                    </div>
+
+                    <button class="btn" type="submit">
+                        Submit Complaint
+                    </button>
+                </form>
+            </div>
+
+        </section>
+
+
+        <!-- CITIZEN COMPLAINTS -->
+
+        <section id="myComplaints" class="page">
+
+            <div class="card">
+                <h3>📋 My Complaints</h3>
+
+                <div class="notice">
+                    You can download your complaints as a CSV report.
+                    You can also delete your own complaints.
+                    Deletion cannot be undone in this demo.
+                </div>
+
+                <div class="section-heading">
+                    <input class="search" id="citizenSearch"
+                           placeholder="Search complaints...">
+
+                    <button class="btn" onclick="exportCSV('citizen')">
+                        ⬇ Download My CSV Report
+                    </button>
+                </div>
+
+                <div id="citizenComplaints" class="complaint-list"></div>
+            </div>
+
+        </section>
+
+
+        <!-- ADMIN DASHBOARD -->
+
+        <section id="adminHome" class="page">
+
+            <div class="welcome">
+                <div>
+                    <h2>Admin Control Center 🛡️</h2>
+                    <p>Manage complaints, assign workers and monitor progress.</p>
+                </div>
+                <div class="welcome-icon">🛠️</div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="icon">📋</div>
+                    <h2 id="adminTotal">0</h2>
+                    <p>Total Complaints</p>
+                </div>
+
+                <div class="stat">
+                    <div class="icon">⏳</div>
+                    <h2 id="adminPending">0</h2>
+                    <p>Pending</p>
+                </div>
+
+                <div class="stat">
+                    <div class="icon">🚛</div>
+                    <h2 id="adminProgress">0</h2>
+                    <p>In Progress</p>
+                </div>
+
+                <div class="stat">
+                    <div class="icon">✅</div>
+                    <h2 id="adminResolved">0</h2>
+                    <p>Resolved</p>
+                </div>
+            </div>
+
+            <div class="section-heading">
+                <h2>All Complaints</h2>
+
+                <button class="btn"
+                        onclick="showPage('manageComplaints')">
+                    Manage →
+                </button>
+            </div>
+
+            <div id="adminRecent" class="complaint-list"></div>
+
+        </section>
+
+
+        <!-- ADMIN MANAGE COMPLAINTS -->
+
+        <section id="manageComplaints" class="page">
+
+            <div class="card">
+                <h3>Manage All Complaints</h3>
+
+                <div class="section-heading">
+                    <input class="search" id="adminSearch"
+                           placeholder="Search complaints...">
+
+                    <button class="btn" onclick="exportCSV('admin')">
+                        ⬇ Download All Complaints CSV
+                    </button>
+                </div>
+
+                <div id="adminComplaints" class="complaint-list"></div>
+            </div>
+
+        </section>
+
+
+        <!-- ADMIN CREATE WORKER -->
+
+        <section id="createWorker" class="page">
+
+            <div class="card">
+                <h3>👷 Create Worker Account</h3>
+
+                <div class="notice">
+                    Only the administrator can create worker accounts.
+                </div>
+
+                <form id="workerForm">
+
+                    <label for="workerName">Worker Name *</label>
+                    <input id="workerName" required
+                           placeholder="Enter worker name">
+
+                    <label for="workerEmail">Worker Email *</label>
+                    <input id="workerEmail" type="email" required
+                           placeholder="worker@example.com">
+
+                    <label for="workerPassword">Password *</label>
+                    <input id="workerPassword" type="password"
+                           minlength="8" required
+                           placeholder="Minimum 8 characters">
+
+                    <button class="btn" type="submit">
+                        Create Worker Account
+                    </button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Registered Workers</h3>
+                <div id="workerList"></div>
+            </div>
+
+        </section>
+
+
+        <!-- WORKER DASHBOARD -->
+
+        <section id="workerHome" class="page">
+
+            <div class="welcome">
+                <div>
+                    <h2>Worker Dashboard 👷</h2>
+                    <p>View assigned cleaning tasks and update their status.</p>
+                </div>
+                <div class="welcome-icon">🚛</div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="icon">📋</div>
+                    <h2 id="workerTotal">0</h2>
+                    <p>Assigned Tasks</p>
+                </div>
+
+                <div class="stat">
+                    <div class="icon">⏳</div>
+                    <h2 id="workerPending">0</h2>
+                    <p>Pending</p>
+                </div>
+
+                <div class="stat">
+                    <div class="icon">🚛</div>
+                    <h2 id="workerProgress">0</h2>
+                    <p>In Progress</p>
+                </div>
+
+                <div class="stat">
+                    <div class="icon">✅</div>
+                    <h2 id="workerResolved">0</h2>
+                    <p>Completed</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-heading">
+                    <h3>My Assigned Tasks</h3>
+
+                    <button class="btn" onclick="exportCSV('worker')">
+                        ⬇ Download My Tasks CSV
+                    </button>
+                </div>
+
+                <div id="workerTasks" class="complaint-list"></div>
+            </div>
+
+        </section>
+
+    </main>
+</section>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
+<script>
+"use strict";
+
+/*
+  DEMO ONLY:
+  This application uses localStorage.
+  It is not secure authentication or a production database.
+*/
+
+const ADMIN_EMAIL = "admin123@gmail.com";
+const ADMIN_PASSWORD = "1234567899";
+
+const KEYS = {
+    users: "cleantrack_users_v2",
+    complaints: "cleantrack_complaints_v2"
+};
+
+let users = readData(KEYS.users);
+let complaints = readData(KEYS.complaints);
+let currentUser = null;
+let selectedPhoto = "";
+let toastTimer;
+
+function readData(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key) || "[]");
+        return Array.isArray(data) ? data : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveData(key, data) {
+    try {
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+    } catch {
+        notify("Storage full. Try a smaller photo or remove some data.");
+        return false;
+    }
+}
+
+function saveUsers() {
+    return saveData(KEYS.users, users);
+}
+
+function saveComplaints() {
+    return saveData(KEYS.complaints, complaints);
+}
+
+function notify(message) {
+    const el = document.getElementById("toast");
+    el.textContent = message;
+    el.style.display = "block";
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        el.style.display = "none";
+    }, 3500);
+}
+
+function showMessage(message, type = "error") {
+    const el = document.getElementById("authMessage");
+    el.className = "message " + type;
+    el.textContent = message;
+}
+
+function clearMessage() {
+    const el = document.getElementById("authMessage");
+    el.className = "";
+    el.textContent = "";
+}
+
+function showAuth(which) {
+    document.getElementById("loginBox").classList.toggle(
+        "hidden", which !== "login"
+    );
+
+    document.getElementById("signupBox").classList.toggle(
+        "hidden", which !== "signup"
+    );
+
+    document.getElementById("adminHelpBox").classList.toggle(
+        "hidden", which !== "adminHelp"
+    );
+
+    clearMessage();
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[ch]);
+}
+
+function newId() {
+    return "GC" + Date.now().toString().slice(-8);
+}
+
+function statusClass(status) {
+    return String(status).replace(/\s+/g, "-");
+}
+
+function statusCounts(list) {
+    return {
+        total: list.length,
+        pending: list.filter(c => c.status === "Pending").length,
+        progress: list.filter(c => c.status === "In Progress").length,
+        resolved: list.filter(c => c.status === "Resolved").length
+    };
+}
+
+function workerName(id) {
+    if (!id) return "Not assigned";
+
+    const worker = users.find(
+        u => u.id === id && u.role === "worker"
+    );
+
+    return worker ? worker.name : "Not assigned";
+}
+
+
+/* CITIZEN REGISTRATION */
+
+document.getElementById("signupForm").addEventListener(
+    "submit", function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("signupName")
+            .value.trim();
+
+        const email = document.getElementById("signupEmail")
+            .value.trim().toLowerCase();
+
+        const password = document.getElementById("signupPassword").value;
+        const confirmPassword = document.getElementById("signupConfirm").value;
+
+        if (email === ADMIN_EMAIL) {
+            showMessage("This email is reserved for the administrator.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            showMessage("Passwords do not match.");
+            return;
+        }
+
+        if (users.some(u => u.email === email)) {
+            showMessage("This email is already registered.");
+            return;
+        }
+
+        const user = {
+            id: "U" + Date.now(),
+            name,
+            email,
+            password,
+            role: "citizen",
+            createdAt: new Date().toISOString()
+        };
+
+        users.push(user);
+
+        if (!saveUsers()) {
+            users.pop();
+            return;
+        }
+
+        this.reset();
+        showAuth("login");
+
+        document.getElementById("loginEmail").value = email;
+
+        showMessage(
+            "Citizen account created! You can now log in.",
+            "success"
+        );
+    }
+);
+
+
+/* LOGIN */
+
+document.getElementById("loginForm").addEventListener(
+    "submit", function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("loginEmail")
+            .value.trim().toLowerCase();
+
+        const password = document.getElementById("loginPassword").value;
+
+        clearMessage();
+
+        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+            currentUser = {
+                id: "admin",
+                name: "Administrator",
+                email: ADMIN_EMAIL,
+                role: "admin"
+            };
+
+            openApp();
+            return;
+        }
+
+        const user = users.find(
+            u => u.email === email && u.password === password
+        );
+
+        if (!user) {
+            showMessage("Invalid email or password.");
+            return;
+        }
+
+        currentUser = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+        };
+
+        openApp();
+    }
+);
+
+
+/* NAVIGATION */
+
+const menus = {
+    citizen: [
+        ["citizenHome", "🏠", "Dashboard"],
+        ["newComplaint", "📝", "New Complaint"],
+        ["myComplaints", "📋", "My Complaints"]
+    ],
+
+    admin: [
+        ["adminHome", "🏠", "Dashboard"],
+        ["manageComplaints", "📋", "All Complaints"],
+        ["createWorker", "👷", "Create Workers"]
+    ],
+
+    worker: [
+        ["workerHome", "🏠", "Dashboard"]
+    ]
+};
+
+const pageNames = {
+    citizenHome: ["Citizen Dashboard", "Your complaints and progress."],
+    newComplaint: ["New Complaint", "Report a garbage problem."],
+    myComplaints: ["My Complaints", "Track, delete or export your complaints."],
+    adminHome: ["Admin Dashboard", "Manage complaints and workers."],
+    manageComplaints: ["Manage Complaints", "Assign tasks and export reports."],
+    createWorker: ["Worker Management", "Create worker accounts."],
+    workerHome: ["Worker Dashboard", "Your assigned cleaning tasks."]
+};
+
+function openApp() {
+    document.getElementById("authPage").classList.add("hidden");
+    document.getElementById("appPage").classList.remove("hidden");
+
+    document.getElementById("profileName").textContent = currentUser.name;
+
+    document.getElementById("profileRole").textContent =
+        currentUser.role.charAt(0).toUpperCase() +
+        currentUser.role.slice(1);
+
+    document.getElementById("navigation").innerHTML =
+        menus[currentUser.role].map(item => `
+            <button class="nav-btn" data-page="${item[0]}"
+                    onclick="showPage('${item[0]}')">
+                ${item[1]} <span class="nav-text">${item[2]}</span>
+            </button>
+        `).join("");
+
+    showPage(menus[currentUser.role][0][0]);
+}
+
+function showPage(pageId) {
+    if (!currentUser) return;
+
+    const allowed = menus[currentUser.role].some(
+        item => item[0] === pageId
+    );
+
+    if (!allowed) {
+        notify("You do not have permission to open this page.");
+        return;
+    }
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.toggle("active", page.id === pageId);
+    });
+
+    document.querySelectorAll("[data-page]").forEach(button => {
+        button.classList.toggle(
+            "active", button.dataset.page === pageId
+        );
+    });
+
+    document.getElementById("pageTitle").textContent =
+        pageNames[pageId][0];
+
+    document.getElementById("pageSubtitle").textContent =
+        pageNames[pageId][1];
+
+    renderAll();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function logout() {
+    currentUser = null;
+    selectedPhoto = "";
+
+    document.getElementById("appPage").classList.add("hidden");
+    document.getElementById("authPage").classList.remove("hidden");
+    document.getElementById("loginForm").reset();
+
+    showAuth("login");
+}
+
+
+/* COMPLAINT DISPLAY */
+
+function complaintCard(c, actions = "") {
+    return `
+        <article class="complaint">
+            <div class="complaint-icon">🗑️</div>
+
+            <div class="complaint-info">
+                <h3>${escapeHTML(c.category)}</h3>
+
+                <p><strong>ID:</strong> ${escapeHTML(c.id)}</p>
+                <p><strong>Location:</strong> ${escapeHTML(c.location)}</p>
+                <p><strong>District:</strong> ${escapeHTML(c.district)}</p>
+                <p><strong>Citizen:</strong> ${escapeHTML(c.citizenName)}</p>
+                <p><strong>Description:</strong> ${escapeHTML(c.description)}</p>
+                <p><strong>Assigned Worker:</strong>
+                    ${escapeHTML(workerName(c.assignedWorkerId))}
+                </p>
+                <p><strong>Submitted:</strong>
+                    ${escapeHTML(new Date(c.createdAt).toLocaleString())}
+                </p>
+
+                <span class="status ${statusClass(c.status)}">
+                    ${escapeHTML(c.status)}
+                </span>
+            </div>
+
+            ${actions ? `<div class="actions">${actions}</div>` : ""}
+        </article>
+    `;
+}
+
+function citizenComplaints() {
+    return complaints.filter(
+        c => c.citizenId === currentUser.id
+    );
+}
+
+
+/* CITIZEN DASHBOARD */
+
+function renderCitizenHome() {
+    document.getElementById("citizenWelcome").textContent =
+        currentUser.name;
+
+    const list = citizenComplaints();
+    const count = statusCounts(list);
+
+    document.getElementById("citizenTotal").textContent = count.total;
+    document.getElementById("citizenPending").textContent = count.pending;
+    document.getElementById("citizenProgress").textContent = count.progress;
+    document.getElementById("citizenResolved").textContent = count.resolved;
+
+    document.getElementById("citizenRecent").innerHTML =
+        list.length
+        ? [...list].reverse().slice(0, 5)
+            .map(c => complaintCard(c)).join("")
+        : `<div class="empty">🌱<br>No complaints yet.<br>Report your first garbage complaint!</div>`;
+}
+
+
+/* CITIZEN COMPLAINT LIST + DELETE */
+
+function renderCitizenComplaints() {
+    if (!currentUser || currentUser.role !== "citizen") return;
+
+    const search = document.getElementById("citizenSearch")
+        .value.trim().toLowerCase();
+
+    const list = citizenComplaints().filter(c =>
+        [c.id, c.location, c.category, c.status].some(value =>
+            String(value).toLowerCase().includes(search)
+        )
+    );
+
+    document.getElementById("citizenComplaints").innerHTML =
+        list.length
+        ? [...list].reverse().map(c => complaintCard(c, `
+            <button class="btn btn-red"
+                    onclick="deleteComplaint('${escapeHTML(c.id)}')">
+                🗑 Delete Complaint
+            </button>
+        `)).join("")
+        : `<div class="empty">No complaints found.</div>`;
+}
+
+function deleteComplaint(id) {
+    if (!currentUser || currentUser.role !== "citizen") {
+        notify("Only citizens can delete their own complaints.");
+        return;
+    }
+
+    const complaint = complaints.find(
+        c => c.id === id && c.citizenId === currentUser.id
+    );
+
+    if (!complaint) {
+        notify("Complaint not found or you do not own this complaint.");
+        return;
+    }
+
+    const confirmed = confirm(
+        "Are you sure you want to permanently delete complaint " +
+        complaint.id + "?\n\nThis action cannot be undone."
+    );
+
+    if (!confirmed) return;
+
+    const previous = complaints;
+
+    complaints = complaints.filter(
+        c => !(c.id === id && c.citizenId === currentUser.id)
+    );
+
+    if (!saveComplaints()) {
+        complaints = previous;
+        return;
+    }
+
+    renderAll();
+    notify("Your complaint has been deleted.");
+}
+
+document.getElementById("citizenSearch").addEventListener(
+    "input", renderCitizenComplaints
+);
+
+
+/* CSV REPORT DOWNLOAD */
+
+/*
+  Escape CSV cells and protect against spreadsheet formula injection.
+  The downloaded report contains complaint text and metadata, not photos.
+*/
+
+function csvCell(value) {
+    let text = String(value ?? "");
+
+    // Prevent untrusted values from being interpreted as spreadsheet formulas.
+    if (/^[\s\u0000-\u001F]*[=+\-@]/.test(text)) {
+        text = "'" + text;
+    }
+
+    return '"' + text.replace(/"/g, '""') + '"';
+}
+
+function downloadCSV(filename, headers, rows) {
+    const lines = [
+        headers.map(csvCell).join(","),
+        ...rows.map(row => row.map(csvCell).join(","))
+    ];
+
+    // UTF-8 BOM helps Excel display UTF-8 text correctly.
+    const csv = "\uFEFF" + lines.join("\r\n");
+
+    const blob = new Blob([csv], {
+        type: "text/csv;charset=utf-8;"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function exportCSV(type) {
+    if (!currentUser) {
+        notify("Please log in first.");
+        return;
+    }
+
+    let report = [];
+
+    if (type === "citizen") {
+        if (currentUser.role !== "citizen") {
+            notify("Citizen access required.");
+            return;
+        }
+
+        // Only the logged-in citizen's complaints are exported.
+        report = citizenComplaints();
+    } else if (type === "admin") {
+        if (currentUser.role !== "admin") {
+            notify("Administrator access required.");
+            return;
+        }
+
+        report = [...complaints];
+    } else if (type === "worker") {
+        if (currentUser.role !== "worker") {
+            notify("Worker access required.");
+            return;
+        }
+
+        // Only tasks assigned to this worker are exported.
+        report = complaints.filter(
+            c => c.assignedWorkerId === currentUser.id
+        );
+    } else {
+        notify("Invalid report type.");
+        return;
+    }
+
+    if (report.length === 0) {
+        notify("No complaints available to export.");
+        return;
+    }
+
+    const headers = [
+        "Complaint ID",
+        "Citizen Name",
+        "Citizen Email",
+        "Category",
+        "District",
+        "Location",
+        "Description",
+        "Status",
+        "Assigned Worker",
+        "Submitted Date"
+    ];
+
+    const rows = report.map(c => {
+        const citizen = users.find(
+            u => u.id === c.citizenId && u.role === "citizen"
+        );
+
+        return [
+            c.id,
+            c.citizenName,
+            citizen ? citizen.email : "",
+            c.category,
+            c.district,
+            c.location,
+            c.description,
+            c.status,
+            workerName(c.assignedWorkerId),
+            new Date(c.createdAt).toLocaleString()
+        ];
+    });
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    let filename;
+
+    if (type === "citizen") {
+        filename = "My_Garbage_Complaints_" + today + ".csv";
+    } else if (type === "admin") {
+        filename = "All_Garbage_Complaints_" + today + ".csv";
+    } else {
+        filename = "My_Assigned_Tasks_" + today + ".csv";
+    }
+
+    downloadCSV(filename, headers, rows);
+
+    notify("CSV report downloaded successfully.");
+}
+
+
+/* SUBMIT COMPLAINT */
+
+document.getElementById("complaintPhoto").addEventListener(
+    "change", function() {
+        const file = this.files[0];
+        selectedPhoto = "";
+
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            notify("Please select an image file.");
+            this.value = "";
+            return;
+        }
+
+        if (file.size > 500 * 1024) {
+            notify("Choose a photo smaller than 500 KB.");
+            this.value = "";
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = event => {
+            selectedPhoto = event.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
+);
+
+document.getElementById("complaintForm").addEventListener(
+    "submit", function(event) {
+        event.preventDefault();
+
+        if (!currentUser || currentUser.role !== "citizen") return;
+
+        const complaint = {
+            id: newId(),
+            citizenId: currentUser.id,
+            citizenName: currentUser.name,
+            category: document.getElementById("complaintCategory").value,
+            district: document.getElementById("complaintDistrict").value,
+            location: document.getElementById("complaintLocation").value.trim(),
+            description: document.getElementById("complaintDescription").value.trim(),
+            photo: selectedPhoto,
+            status: "Pending",
+            assignedWorkerId: null,
+            createdAt: new Date().toISOString(),
+            updates: [{
+                status: "Pending",
+                date: new Date().toISOString(),
+                note: "Complaint submitted."
+            }]
+        };
+
+        complaints.push(complaint);
+
+        if (!saveComplaints()) {
+            complaints.pop();
+            return;
+        }
+
+        this.reset();
+        selectedPhoto = "";
+
+        notify("Complaint submitted! ID: " + complaint.id);
+        showPage("myComplaints");
+    }
+);
+
+
+/* ADMIN DASHBOARD */
+
+function renderAdminHome() {
+    const count = statusCounts(complaints);
+
+    document.getElementById("adminTotal").textContent = count.total;
+    document.getElementById("adminPending").textContent = count.pending;
+    document.getElementById("adminProgress").textContent = count.progress;
+    document.getElementById("adminResolved").textContent = count.resolved;
+
+    document.getElementById("adminRecent").innerHTML =
+        complaints.length
+        ? [...complaints].reverse().slice(0, 5)
+            .map(c => complaintCard(c)).join("")
+        : `<div class="empty">No complaints have been submitted.</div>`;
+}
+
+function renderAdminComplaints() {
+    if (!currentUser || currentUser.role !== "admin") return;
+
+    const search = document.getElementById("adminSearch")
+        .value.trim().toLowerCase();
+
+    const list = [...complaints].reverse().filter(c =>
+        [c.id, c.location, c.category, c.citizenName, c.status].some(
+            value => String(value).toLowerCase().includes(search)
+        )
+    );
+
+    document.getElementById("adminComplaints").innerHTML =
+        list.length
+        ? list.map(c => {
+            const workerOptions = users
+                .filter(u => u.role === "worker")
+                .map(u => `
+                    <option value="${escapeHTML(u.id)}"
+                        ${c.assignedWorkerId === u.id ? "selected" : ""}>
+                        ${escapeHTML(u.name)}
+                    </option>
+                `).join("");
+
+            return complaintCard(c, `
+                <label>Assign Worker</label>
+
+                <select id="assign-${escapeHTML(c.id)}">
+                    <option value="">Not assigned</option>
+                    ${workerOptions}
+                </select>
+
+                <button class="small-btn"
+                        onclick="assignWorker('${escapeHTML(c.id)}')">
+                    Assign Worker
+                </button>
+
+                <label>Status</label>
+
+                <select id="admin-status-${escapeHTML(c.id)}">
+                    ${["Pending", "In Progress", "Resolved", "Rejected"]
+                        .map(s => `
+                            <option value="${s}"
+                                ${c.status === s ? "selected" : ""}>
+                                ${s}
+                            </option>
+                        `).join("")}
+                </select>
+
+                <button class="btn"
+                        onclick="updateComplaintStatus('${escapeHTML(c.id)}','admin')">
+                    Save Status
+                </button>
+            `);
+        }).join("")
+        : `<div class="empty">No complaints found.</div>`;
+}
+
+function assignWorker(id) {
+    if (!currentUser || currentUser.role !== "admin") return;
+
+    const complaint = complaints.find(c => c.id === id);
+    if (!complaint) return;
+
+    const workerId = document.getElementById("assign-" + id).value;
+
+    if (workerId && !users.some(
+        u => u.id === workerId && u.role === "worker"
+    )) {
+        notify("Invalid worker.");
+        return;
+    }
+
+    const oldId = complaint.assignedWorkerId;
+    complaint.assignedWorkerId = workerId || null;
+
+    if (!saveComplaints()) {
+        complaint.assignedWorkerId = oldId;
+        return;
+    }
+
+    renderAll();
+    notify("Worker assignment saved.");
+}
+
+
+/* UPDATE COMPLAINT STATUS */
+
+function updateComplaintStatus(id, source) {
+    if (!currentUser) return;
+
+    if (source === "admin" && currentUser.role !== "admin") return;
+    if (source === "worker" && currentUser.role !== "worker") return;
+
+    const complaint = complaints.find(c => c.id === id);
+    if (!complaint) return;
+
+    if (
+        source === "worker" &&
+        complaint.assignedWorkerId !== currentUser.id
+    ) {
+        notify("This task is not assigned to you.");
+        return;
+    }
+
+    const selectId = source === "admin"
+        ? "admin-status-" + id
+        : "worker-status-" + id;
+
+    const newStatus = document.getElementById(selectId).value;
+    const oldStatus = complaint.status;
+
+    if (oldStatus === newStatus) {
+        notify("Status is already " + newStatus + ".");
+        return;
+    }
+
+    complaint.status = newStatus;
+    complaint.updates = complaint.updates || [];
+
+    complaint.updates.push({
+        status: newStatus,
+        date: new Date().toISOString(),
+        note: "Status updated to " + newStatus + "."
+    });
+
+    if (!saveComplaints()) {
+        complaint.status = oldStatus;
+        complaint.updates.pop();
+        return;
+    }
+
+    renderAll();
+    notify("Complaint status updated.");
+}
+
+document.getElementById("adminSearch").addEventListener(
+    "input", renderAdminComplaints
+);
+
+
+/* CREATE WORKER */
+
+document.getElementById("workerForm").addEventListener(
+    "submit", function(event) {
+        event.preventDefault();
+
+        if (!currentUser || currentUser.role !== "admin") return;
+
+        const name = document.getElementById("workerName")
+            .value.trim();
+
+        const email = document.getElementById("workerEmail")
+            .value.trim().toLowerCase();
+
+        const password = document.getElementById("workerPassword").value;
+
+        if (email === ADMIN_EMAIL) {
+            notify("This email belongs to the administrator.");
+            return;
+        }
+
+        if (users.some(u => u.email === email)) {
+            notify("An account with this email already exists.");
+            return;
+        }
+
+        const worker = {
+            id: "W" + Date.now(),
+            name,
+            email,
+            password,
+            role: "worker",
+            createdAt: new Date().toISOString()
+        };
+
+        users.push(worker);
+
+        if (!saveUsers()) {
+            users.pop();
+            return;
+        }
+
+        this.reset();
+
+        renderWorkers();
+        notify("Worker account created successfully.");
+    }
+);
+
+function renderWorkers() {
+    const workers = users.filter(u => u.role === "worker");
+
+    document.getElementById("workerList").innerHTML =
+        workers.length
+        ? workers.map(w => `
+            <div class="worker-card">
+                <strong>👷 ${escapeHTML(w.name)}</strong>
+                <p>Email: ${escapeHTML(w.email)}</p>
+                <p>Worker ID: ${escapeHTML(w.id)}</p>
+            </div>
+        `).join("")
+        : `<div class="empty">No workers created yet.</div>`;
+}
+
+
+/* WORKER DASHBOARD */
+
+function renderWorkerHome() {
+    const tasks = complaints.filter(
+        c => c.assignedWorkerId === currentUser.id
+    );
+
+    const count = statusCounts(tasks);
+
+    document.getElementById("workerTotal").textContent = count.total;
+    document.getElementById("workerPending").textContent = count.pending;
+    document.getElementById("workerProgress").textContent = count.progress;
+    document.getElementById("workerResolved").textContent = count.resolved;
+
+    document.getElementById("workerTasks").innerHTML =
+        tasks.length
+        ? tasks.map(c => complaintCard(c, `
+            <label>Update Status</label>
+
+            <select id="worker-status-${escapeHTML(c.id)}">
+                ${["Pending", "In Progress", "Resolved"]
+                    .map(s => `
+                        <option value="${s}"
+                            ${c.status === s ? "selected" : ""}>
+                            ${s}
+                        </option>
+                    `).join("")}
+            </select>
+
+            <button class="btn"
+                    onclick="updateComplaintStatus('${escapeHTML(c.id)}','worker')">
+                Update Task
+            </button>
+        `)).join("")
+        : `<div class="empty">🚛<br>No tasks assigned yet.</div>`;
+}
+
+
+/* REFRESH ALL DASHBOARDS */
+
+function renderAll() {
+    if (!currentUser) return;
+
+    if (currentUser.role === "citizen") {
+        renderCitizenHome();
+        renderCitizenComplaints();
+    }
+
+    if (currentUser.role === "admin") {
+        renderAdminHome();
+        renderAdminComplaints();
+        renderWorkers();
+    }
+
+    if (currentUser.role === "worker") {
+        renderWorkerHome();
+    }
+}
+</script>
+
+</body>
+</html>
+```
